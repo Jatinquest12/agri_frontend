@@ -16,6 +16,16 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Agritrust backend
+
+Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_BACKEND_API_BASE` to your API root including `/api` (for example `http://127.0.0.1:5000/api`).
+
+Farm list, farm detail, admin analytics, the farmer dashboard, farmer proof tooling, and public `/verify/p/[farmId]` read from **`GET /api/farms`** and **`GET /api/farms/:id`**. Fabric status and **`GET /api/proof/verify`** are used from the farmer proof page and admin verification.
+
+The farmer **Register farm** flow calls **`POST /api/farms/register`**. Auth uses **`POST /api/auth/otp/*`** with JWT on subsequent requests (set `DEMO_OTP` and `ADMIN_PHONES` on the backend).
+
+**Implementation plan:** See [docs/FRONTEND_IMPLEMENTATION_PLAN.md](./docs/FRONTEND_IMPLEMENTATION_PLAN.md) for a phased roadmap (auth → registry → monitoring → proof → public verify → maps).
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
