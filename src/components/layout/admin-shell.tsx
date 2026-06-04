@@ -1,11 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useAuth } from "@/context/auth-context";
 import { useNavigationShortcuts } from "@/hooks/use-navigation-shortcuts";
+import { AppBrand } from "@/components/layout/app-brand";
+import { BackendStatusBanner } from "@/components/layout/backend-status-banner";
+import { MobileNavSheet } from "@/components/layout/mobile-nav-sheet";
+import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { buttonClasses } from "@/components/ui/button";
 import { CommandPalette, type CommandItem } from "@/components/ui/command-palette";
 import { LoadingState, SkeletonCard } from "@/components/ui/states";
@@ -110,6 +113,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useNavigationShortcuts({
     slash: () => setPaletteOpen(true),
@@ -146,28 +150,31 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="app-backdrop min-h-screen bg-gradient-to-b from-slate-100/80 via-white to-slate-50 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-950">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-5 lg:px-8">
+        <BackendStatusBanner />
         <header className="surface-card rounded-2xl border border-slate-200/80 bg-white/85 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                Admin Console
-              </p>
-              <p className="mt-1 text-sm font-medium text-slate-700 dark:text-slate-200">
-                Signed in as {user.name} ({user.role})
-              </p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Shortcuts: <kbd>/</kbd> or <kbd>Ctrl/⌘</kbd>+<kbd>K</kbd> command
-                palette, <kbd>g</kbd> then <kbd>f</kbd> farms, <kbd>g</kbd> then{" "}
-                <kbd>a</kbd> analytics
+            <div className="min-w-0 flex-1">
+              <AppBrand subtitle={`Admin console · ${user.name} (${user.role})`} />
+              <p className="mt-2 hidden text-xs text-slate-500 dark:text-slate-400 sm:block">
+                Shortcuts: <kbd>/</kbd> or <kbd>Ctrl/⌘</kbd>+<kbd>K</kbd> palette ·{" "}
+                <kbd>g</kbd>+<kbd>f</kbd> farms · <kbd>g</kbd>+<kbd>a</kbd> analytics
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
+                className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 lg:hidden"
+                onClick={() => setMobileNavOpen(true)}
+                aria-expanded={mobileNavOpen}
+              >
+                Menu
+              </button>
+              <button
+                type="button"
                 className={buttonClasses({ variant: "secondary", size: "sm" })}
                 onClick={() => setPaletteOpen(true)}
               >
-                Palette
+                Search
               </button>
               <button
                 type="button"
@@ -182,37 +189,24 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <div className="flex flex-col gap-6 lg:flex-row">
-          <aside className="lg:w-64 lg:shrink-0">
+          <aside className="hidden lg:block lg:w-64 lg:shrink-0">
             <div className="surface-card sticky top-5 rounded-2xl border border-slate-200/90 bg-white/90 p-3 dark:border-slate-800 dark:bg-slate-900/80">
               <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                 Navigation
               </p>
-              <nav className="flex flex-col gap-1 text-sm">
-                {links.map((l) => {
-                  const active =
-                    l.href === "/admin"
-                      ? pathname === "/admin"
-                      : pathname.startsWith(l.href);
-                  return (
-                    <Link
-                      key={l.href}
-                      href={l.href}
-                      className={`rounded-xl px-3 py-2 ${
-                        active
-                          ? "bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900"
-                          : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-                      } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400`}
-                    >
-                      {l.label}
-                    </Link>
-                  );
-                })}
-              </nav>
+              <SidebarNav links={links} pathname={pathname} variant="admin" />
             </div>
           </aside>
-          <main className="min-w-0 flex-1 space-y-6 pb-8">{children}</main>
+          <main className="min-w-0 flex-1 space-y-6 pb-20 lg:pb-8">{children}</main>
         </div>
       </div>
+      <MobileNavSheet
+        open={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        links={links}
+        pathname={pathname}
+        variant="admin"
+      />
       <CommandPalette
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}

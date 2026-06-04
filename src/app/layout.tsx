@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { brand } from "@/data/site-content";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -14,10 +15,40 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteDescription =
+  "Agritrust is a farm registry and verification platform for crop monitoring, admin operations, blockchain-backed proof of agriculture, and public supply-chain checks.";
+
 export const metadata: Metadata = {
-  title: "AgriSentinel | Blockchain Agricultural Intelligence",
-  description:
-    "AgriSentinel is an AI and blockchain-powered agricultural intelligence platform for crop monitoring, insurance automation, credit scoring, and produce traceability.",
+  title: {
+    default: `${brand.name} | Farm registry & verification`,
+    template: `%s | ${brand.name}`,
+  },
+  description: siteDescription,
+  keywords: [
+    "agriculture",
+    "farm registry",
+    "crop monitoring",
+    "proof of agriculture",
+    "traceability",
+    "Hyperledger",
+  ],
+  authors: [{ name: brand.name }],
+  openGraph: {
+    title: `${brand.name} | Farm registry & verification`,
+    description: siteDescription,
+    type: "website",
+    locale: "en_IN",
+  },
+  robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: dark)", color: "#090d12" },
+  ],
 };
 
 export default function RootLayout({
@@ -31,7 +62,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col">
+      <body suppressHydrationWarning className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
       </body>
     </html>

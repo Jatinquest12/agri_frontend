@@ -1,46 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Agritrust Frontend
 
-## Getting Started
+Next.js 16 application for the Agritrust farm registry, crop intelligence, and verification platform.
 
-First, run the development server:
+## Quick start
 
 ```bash
+npm install
+cp .env.example .env.local   # if present
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) for the marketing home page and portal links.
 
-## Agritrust backend
+## Environment
 
-Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_BACKEND_API_BASE` to your API root including `/api` (for example `http://127.0.0.1:5000/api`).
+Set `NEXT_PUBLIC_BACKEND_API_BASE` to your API root including `/api` (for example `http://127.0.0.1:5000/api`).
 
-Farm list, farm detail, admin analytics, the farmer dashboard, farmer proof tooling, and public `/verify/p/[farmId]` read from **`GET /api/farms`** and **`GET /api/farms/:id`**. Fabric status and **`GET /api/proof/verify`** are used from the farmer proof page and admin verification.
+Backend demo auth: `DEMO_OTP` and `ADMIN_PHONES` on the API service.
 
-The farmer **Register farm** flow calls **`POST /api/farms/register`**. Auth uses **`POST /api/auth/otp/*`** with JWT on subsequent requests (set `DEMO_OTP` and `ADMIN_PHONES` on the backend).
+## Portals
 
-**Implementation plan:** See [docs/FRONTEND_IMPLEMENTATION_PLAN.md](./docs/FRONTEND_IMPLEMENTATION_PLAN.md) for a phased roadmap (auth → registry → monitoring → proof → public verify → maps).
+| Route | Audience |
+|-------|----------|
+| `/farmer/login` | Farmers — farms, insights, proof |
+| `/admin/login` | Staff — approvals, analytics, verification |
+| `/verify` | Public — proof checks without login |
+| `/lab` | Developers — direct API console |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm run lint` — ESLint
+- `npm run test:e2e` — Playwright tests
 
-## Learn More
+## Content & marketing
 
-To learn more about Next.js, take a look at the following resources:
+Landing page copy and structure live in `src/data/site-content.ts`. Section components are under `src/components/sections/`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Implementation plan
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [docs/FRONTEND_IMPLEMENTATION_PLAN.md](./docs/FRONTEND_IMPLEMENTATION_PLAN.md) for the phased API integration roadmap.

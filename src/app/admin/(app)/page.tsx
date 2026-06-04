@@ -18,6 +18,10 @@ export default function AdminHomePage() {
       <PageHeader
         title="Operations overview"
         description="Approvals, AI jobs, and verification posture at a glance."
+        breadcrumbs={[
+          { label: "Admin", href: "/admin" },
+          { label: "Overview" },
+        ]}
       />
       <div className="grid gap-4 md:grid-cols-3">
         <Card title="Pending farmers" tone="brand">

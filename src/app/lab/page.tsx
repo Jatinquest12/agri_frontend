@@ -37,6 +37,10 @@ export default function LabConsolePage() {
     ndvi_index: 0.62,
     crop_index: 0.71,
   });
+  const [bhuvan, setBhuvan] = useState({
+    distcode: "2301",
+    year: "1112" as "0506" | "1112",
+  });
   const [weather, setWeather] = useState({
     rainfall: 31,
     temperature: 28,
@@ -266,6 +270,40 @@ export default function LabConsolePage() {
               Ingest Satellite
             </button>
             <button
+              className="rounded-md bg-indigo-700 px-3 py-2 text-white disabled:opacity-60"
+              disabled={!farmId || busy}
+              onClick={() =>
+                run("ingest_bhuvan_satellite", () =>
+                  request(`/monitoring/${farmId}/ingest/satellite`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                      fetch_bhuvan: true,
+                      year: bhuvan.year,
+                      distcode: bhuvan.distcode,
+                    }),
+                  }),
+                )
+              }
+            >
+              Ingest Bhuvan + NASA
+            </button>
+            <button
+              className="rounded-md bg-indigo-600 px-3 py-2 text-white disabled:opacity-60"
+              disabled={busy}
+              onClick={() => {
+                const q = new URLSearchParams({
+                  distcode: bhuvan.distcode,
+                  year: bhuvan.year,
+                });
+                if (farmId) q.set("farm_id", farmId);
+                return run("bhuvan_lulc", () =>
+                  request(`/satellite/lulc?${q.toString()}`),
+                );
+              }}
+            >
+              Bhuvan LULC
+            </button>
+            <button
               className="rounded-md bg-slate-800 px-3 py-2 text-white disabled:opacity-60"
               disabled={!farmId || busy}
               onClick={() =>
@@ -300,6 +338,27 @@ export default function LabConsolePage() {
               }
               placeholder="ndvi_index"
             />
+            <input
+              className="rounded-md border px-3 py-2"
+              value={bhuvan.distcode}
+              onChange={(event) =>
+                setBhuvan((prev) => ({ ...prev, distcode: event.target.value }))
+              }
+              placeholder="Bhuvan distcode"
+            />
+            <select
+              className="rounded-md border px-3 py-2"
+              value={bhuvan.year}
+              onChange={(event) =>
+                setBhuvan((prev) => ({
+                  ...prev,
+                  year: event.target.value as "0506" | "1112",
+                }))
+              }
+            >
+              <option value="1112">LULC 2011-12</option>
+              <option value="0506">LULC 2005-06</option>
+            </select>
             <input
               className="rounded-md border px-3 py-2"
               type="number"

@@ -30,13 +30,23 @@ type AuthContextValue = {
   pendingPhone: string;
   authError: string | null;
   sendOtp: (phone: string) => Promise<void>;
-  verifyOtp: (code: string) => Promise<boolean>;
+  verifyOtp: (
+    code: string,
+    phone?: string,
+    options?: { allowedRoles?: UserRole[] },
+  ) => Promise<boolean>;
+  resetOtpFlow: () => void;
   logout: () => Promise<void>;
   updateProfile: (patch: Partial<Pick<AuthUser, "name" | "email" | "phone">>) => void;
   refreshUser: () => Promise<void>;
 };
 
 const STORAGE_KEY = "agritrust_user_v1";
+
+function normalizePhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  return digits.startsWith("0") ? digits.replace(/^0+/, "") : digits;
+}
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -99,6 +109,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void init();
   }, [refreshUser]);
 
+  const resetOtpFlow = useCallback(() => {
+    setOtpSent(false);
+    setPendingPhone("");
+    setAuthError(null);
+  }, []);
+
   const sendOtp = useCallback(async (phone: string) => {
     setAuthError(null);
     const trimmed = phone.trim();
@@ -106,22 +122,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAuthError("Enter a mobile number.");
       throw new Error("Enter a mobile number.");
     }
-    await requestOtp(trimmed);
-    setPendingPhone(trimmed);
+    const normalized = normalizePhone(trimmed);
+    await requestOtp(normalized);
+    setPendingPhone(normalized);
     setOtpSent(true);
   }, []);
 
-  const verifyOtp = useCallback(async (code: string) => {
+  const verifyOtp = useCallback(async (
+    code: string,
+    phoneArg?: string,
+    options?: { allowedRoles?: UserRole[] },
+  ) => {
     setAuthError(null);
     const trimmed = code.trim();
+    const phone = normalizePhone(phoneArg ?? pendingPhone);
+    if (!phone) {
+      setAuthError("Enter a mobile number and request OTP first.");
+      return false;
+    }
     if (trimmed.length < 4) {
       setAuthError("Enter a valid OTP.");
       return false;
     }
     try {
-      const tokens = await verifyOtpApi(pendingPhone, trimmed);
-      setTokens(tokens.access_token, tokens.refresh_token);
+      const tokens = await verifyOtpApi(phone, trimmed);
       const next = mapBackendUser(tokens.user);
+      const allowedRoles = options?.allowedRoles;
+      if (allowedRoles && !allowedRoles.includes(next.role)) {
+        clearTokens();
+        throw new Error(
+          `This phone signed in as "${next.role}". Add it to ADMIN_PHONES (or AGRONOMIST_PHONES) in backend .env, restart the server, and try again.`,
+        );
+      }
+      setTokens(tokens.access_token, tokens.refresh_token);
       setUser(next);
       saveUser(next);
       setOtpSent(false);
@@ -172,6 +205,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       authError,
       sendOtp,
       verifyOtp,
+      resetOtpFlow,
       logout,
       updateProfile,
       refreshUser,
@@ -184,6 +218,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       authError,
       sendOtp,
       verifyOtp,
+      resetOtpFlow,
       logout,
       updateProfile,
       refreshUser,

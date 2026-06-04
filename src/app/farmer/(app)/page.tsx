@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 
-import { buttonClasses } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
+import { LinkButton } from "@/components/ui/link-button";
 import { Card, Pill } from "@/components/ui/card";
 import { CountUp } from "@/components/ui/count-up";
 import { PageHeader } from "@/components/ui/page-header";
-import { EmptyState } from "@/components/ui/states";
+import { EmptyState, SkeletonBlock } from "@/components/ui/states";
 import { BodyRow, DataTable, HeadRow, TD, TH } from "@/components/ui/table";
 import { useFarmsFromApi } from "@/hooks/use-farms-from-api";
 import { mockNotifications } from "@/lib/mock-data";
@@ -15,30 +16,38 @@ export default function FarmerHomePage() {
   const { farms, loading, error, reload } = useFarmsFromApi();
 
   const unread = mockNotifications.filter((n) => !n.read).length;
+  const pending = farms.filter((f) => f.status === "pending_review").length;
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Dashboard"
         description="Crop intelligence, proofs, and alerts in one unified workflow."
-        actions={
-          <Link href="/farmer/farms/new" className={buttonClasses()}>
-            Add farm (local demo)
-          </Link>
-        }
+        breadcrumbs={[
+          { label: "Farmer", href: "/farmer" },
+          { label: "Dashboard" },
+        ]}
+        actions={<LinkButton href="/farmer/farms/new">Register farm</LinkButton>}
       />
+
       {error ? (
-        <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
-          Registry API error: {error}{" "}
-          <button
-            type="button"
-            className="ml-1 underline"
-            onClick={() => void reload()}
-          >
-            Retry
-          </button>
-        </p>
+        <Alert
+          tone="warning"
+          title="Registry API unavailable"
+          actions={
+            <button
+              type="button"
+              className="rounded-lg border border-amber-300 px-3 py-1.5 text-xs font-semibold hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-950"
+              onClick={() => void reload()}
+            >
+              Retry
+            </button>
+          }
+        >
+          {error}
+        </Alert>
       ) : null}
+
       <div className="grid gap-4 md:grid-cols-3">
         <Card title="Registered farms" tone="brand">
           <p className="text-3xl font-bold text-emerald-800 dark:text-emerald-200">
@@ -48,16 +57,22 @@ export default function FarmerHomePage() {
             href="/farmer/farms"
             className="mt-2 inline-block text-sm font-medium text-emerald-700 underline"
           >
-            View farms
+            View all farms
           </Link>
         </Card>
-        <Card title="Notifications">
+        <Card title="Pending review">
           <p className="text-3xl font-bold text-amber-800 dark:text-amber-200">
-            <CountUp value={unread} />
+            {loading && farms.length === 0 ? "…" : <CountUp value={pending} />}
           </p>
           <span className="text-sm text-slate-600 dark:text-slate-400">
-            unread messages
+            awaiting admin approval
           </span>
+        </Card>
+        <Card title="Notifications">
+          <p className="text-3xl font-bold text-slate-800 dark:text-slate-200">
+            <CountUp value={unread} />
+          </p>
+          <span className="text-sm text-slate-600 dark:text-slate-400">unread</span>
           <Link
             href="/farmer/notifications"
             className="mt-2 inline-block text-sm font-medium text-emerald-700 underline"
@@ -65,19 +80,21 @@ export default function FarmerHomePage() {
             Open inbox
           </Link>
         </Card>
-        <Card title="Next steps">
-          <ul className="list-inside list-disc space-y-1 text-sm text-slate-700 dark:text-slate-300">
-            <li>Complete pending farm review</li>
-            <li>Refresh AI insights after new images</li>
-            <li>Download your latest certificate</li>
-          </ul>
-        </Card>
       </div>
+
       <Card title="Farm status snapshot">
+        {loading && farms.length === 0 ? (
+          <div className="space-y-2" aria-busy="true" aria-label="Loading farms">
+            <SkeletonBlock className="h-10 w-full" />
+            <SkeletonBlock className="h-10 w-full" />
+            <SkeletonBlock className="h-10 w-3/4" />
+          </div>
+        ) : null}
         {!loading && farms.length === 0 ? (
           <EmptyState
             title="No farms yet"
-            description="Register a farm via POST /api/farms/register so it appears here from the backend."
+            description="Register your first farm to sync with the backend registry and unlock insights and proof tooling."
+            action={<LinkButton href="/farmer/farms/new">Register farm</LinkButton>}
           />
         ) : null}
         {farms.length > 0 ? (
@@ -117,8 +134,6 @@ export default function FarmerHomePage() {
               ))}
             </tbody>
           </DataTable>
-        ) : loading ? (
-          <p className="text-sm text-slate-500">Loading farms…</p>
         ) : null}
       </Card>
     </div>

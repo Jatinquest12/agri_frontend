@@ -7,15 +7,26 @@ import { CountUp } from "@/components/ui/count-up";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/states";
 import { SimpleLineChart } from "@/components/charts/simple-line-chart";
+import { LulcBarChart } from "@/components/charts/lulc-bar-chart";
 import { Field } from "@/components/ui/field";
 import { mockAiAlerts } from "@/lib/mock-data";
 import { fetchFarmAnalytics } from "@/lib/analytics-api";
+import {
+  fetchFarmLulc,
+  type BhuvanLulcStats,
+  type BhuvanLulcYear,
+} from "@/lib/satellite-api";
 import { useFarmsFromApi } from "@/hooks/use-farms-from-api";
 import type { Farm } from "@/types/platform";
 
 export default function FarmerInsightsPage() {
   const { farms, loading, error } = useFarmsFromApi();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [lulcYear, setLulcYear] = useState<BhuvanLulcYear>("1112");
+  const [districtCode, setDistrictCode] = useState("");
+  const [lulc, setLulc] = useState<BhuvanLulcStats | null>(null);
+  const [lulcError, setLulcError] = useState("");
+  const [lulcLoading, setLulcLoading] = useState(false);
 
   useEffect(() => {
     if (selectedId !== null || farms.length === 0) return;
@@ -52,6 +63,32 @@ export default function FarmerInsightsPage() {
       cancelled = true;
     };
   }, [primary?.id]);
+
+  useEffect(() => {
+    if (!primary?.id) return;
+    let cancelled = false;
+    (async () => {
+      setLulcLoading(true);
+      setLulcError("");
+      try {
+        const data = await fetchFarmLulc(primary.id, {
+          year: lulcYear,
+          distcode: districtCode.trim() || undefined,
+        });
+        if (!cancelled) setLulc(data.lulc);
+      } catch (e) {
+        if (!cancelled) {
+          setLulc(null);
+          setLulcError((e as Error).message);
+        }
+      } finally {
+        if (!cancelled) setLulcLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [primary?.id, lulcYear, districtCode]);
 
   return (
     <div className="space-y-6">
@@ -120,6 +157,92 @@ export default function FarmerInsightsPage() {
                 Ingest satellite/weather data for this farm to populate trends.
               </p>
             )}
+          </Card>
+          <Card
+            title="Land use / land cover (Bhuvan LULC 50k)"
+            subtitle="District or state statistics from ISRO Bhuvan NRSC"
+          >
+            <div className="mb-4 grid gap-3 sm:grid-cols-2">
+              <Field label="Bhuvan district code (optional override)">
+                <input
+                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm dark:border-slate-700 dark:bg-slate-950"
+                  placeholder="e.g. 2301 (Khammam)"
+                  value={districtCode}
+                  onChange={(e) => setDistrictCode(e.target.value)}
+                />
+              </Field>
+              <Field label="Survey year">
+                <select
+                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm dark:border-slate-700 dark:bg-slate-950"
+                  value={lulcYear}
+                  onChange={(e) => setLulcYear(e.target.value as BhuvanLulcYear)}
+                >
+                  <option value="1112">2011–2012</option>
+                  <option value="0506">2005–2006</option>
+                </select>
+              </Field>
+            </div>
+            {lulcLoading ? (
+              <p className="text-sm text-slate-500">Loading Bhuvan LULC…</p>
+            ) : null}
+            {lulcError ? (
+              <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+                {lulcError}
+                {" "}
+                Set <code className="text-xs">BHUVAN_LULC_TOKEN</code> on the backend and
+                assign a <code className="text-xs">district_code</code> to the farm, or enter
+                a district code above.
+              </p>
+            ) : null}
+            {lulc ? (
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Pill tone="neutral">{lulc.name}</Pill>
+                  <Pill tone="neutral">
+                    {lulc.scope === "district" ? "District" : "State"} {lulc.scope_code}
+                  </Pill>
+                  <Pill tone="ok">
+                    Agricultural cover {lulc.agricultural_percent.toFixed(1)}%
+                  </Pill>
+                </div>
+                <LulcBarChart
+                  data={lulc.classes.map((c) => ({
+                    label: c.label,
+                    percent: c.percent,
+                    area_sqkm: c.area_sqkm,
+                  }))}
+                />
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[420px] text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-slate-200 text-slate-500 dark:border-slate-800">
+                        <th className="py-2 pr-3 font-medium">Class</th>
+                        <th className="py-2 pr-3 font-medium">Area (km²)</th>
+                        <th className="py-2 font-medium">Share</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {lulc.classes.map((row) => (
+                        <tr
+                          key={row.code}
+                          className="border-b border-slate-100 dark:border-slate-900"
+                        >
+                          <td className="py-2 pr-3">{row.label}</td>
+                          <td className="py-2 pr-3 tabular-nums">
+                            {row.area_sqkm.toFixed(2)}
+                          </td>
+                          <td className="py-2 tabular-nums">{row.percent.toFixed(2)}%</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Total mapped area: {lulc.total_area_sqkm.toFixed(2)} km² · Crop index{" "}
+                  {lulc.crop_index.toFixed(2)} (used to blend NDVI during satellite ingest)
+                </p>
+              </div>
+            ) : null}
           </Card>
           <Card title="Disease / anomaly alerts">
             <ul className="space-y-3">
