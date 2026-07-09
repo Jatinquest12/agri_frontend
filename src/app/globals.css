@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
+  --background: #F8FAF5;
   --background-soft: #ffffff;
   --foreground: #0f172a;
   --muted: #475569;
-  --border: #dbe4ee;
-  --brand: #059669;
-  --brand-strong: #047857;
+  --border: #DDEFD8;
+  --brand: #2E7D32;
+  --brand-strong: #1B4332;
 }
 
 @theme inline {
@@ -17,17 +17,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #090d12;
-    --background-soft: #0f172a;
-    --foreground: #e2e8f0;
-    --muted: #94a3b8;
-    --border: #1e293b;
-    --brand: #10b981;
-    --brand-strong: #34d399;
-  }
-}
+@custom-variant dark (&:where(.dark, .dark *));
+
 
 * {
   box-sizing: border-box;
@@ -144,6 +135,20 @@ kbd {
   font-weight: 700;
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   background: color-mix(in oklab, var(--background-soft) 92%, white);
+}
+
+.glass-panel {
+  background: #ffffff;
+  border: 1px solid #DDEFD8;
+  box-shadow: 0 8px 32px rgba(46, 125, 50, 0.05);
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, var(--brand-strong), var(--brand));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .card-motion {

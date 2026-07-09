@@ -50,7 +50,7 @@ export default function FarmerHomePage() {
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card title="Registered farms" tone="brand">
-          <p className="text-3xl font-bold text-emerald-800 dark:text-emerald-200">
+          <p className="text-5xl font-extrabold tracking-tighter text-gradient-brand">
             {loading && farms.length === 0 ? "…" : <CountUp value={farms.length} />}
           </p>
           <Link
@@ -61,7 +61,7 @@ export default function FarmerHomePage() {
           </Link>
         </Card>
         <Card title="Pending review">
-          <p className="text-3xl font-bold text-amber-800 dark:text-amber-200">
+          <p className="text-5xl font-extrabold tracking-tighter text-amber-700 dark:text-amber-400">
             {loading && farms.length === 0 ? "…" : <CountUp value={pending} />}
           </p>
           <span className="text-sm text-slate-600 dark:text-slate-400">
@@ -69,7 +69,7 @@ export default function FarmerHomePage() {
           </span>
         </Card>
         <Card title="Notifications">
-          <p className="text-3xl font-bold text-slate-800 dark:text-slate-200">
+          <p className="text-5xl font-extrabold tracking-tighter text-slate-800 dark:text-slate-200">
             <CountUp value={unread} />
           </p>
           <span className="text-sm text-slate-600 dark:text-slate-400">unread</span>

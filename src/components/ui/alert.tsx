@@ -5,7 +5,7 @@ type AlertTone = "info" | "success" | "warning" | "error";
 const tones: Record<AlertTone, string> = {
   info: "border-slate-200 bg-slate-50 text-slate-800 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200",
   success:
-    "border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-100",
+    "border-[#DDEFD8] bg-[#E8F5E9] text-[#1B4332] dark:border-[#2E7D32]/50 dark:bg-[#1B4332]/40 dark:text-[#A5D6A7]",
   warning:
     "border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100",
   error:
