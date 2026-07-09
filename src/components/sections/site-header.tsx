@@ -44,10 +44,10 @@ export function SiteHeader({ navItems }: SiteHeaderProps) {
         <div className="flex items-center gap-3">
           <Link
             href="/farmer/login"
-            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#F59E0B] px-5 py-2 font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-[#F59E0B]/30"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white px-5 py-2 font-semibold text-[#1B4332] shadow-lg transition-all hover:scale-105 hover:shadow-white/30"
           >
             <span className="relative z-10">Sign in</span>
-            <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-r from-[#F59E0B] to-[#F59E0B] opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-r from-white to-white opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
         </div>
       </div>

@@ -118,13 +118,13 @@ export function FarmerShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.replace("/farmer/login");
+      router.replace("/");
       return;
     }
     if (user.role === "admin" || user.role === "agronomist") {
       router.replace("/admin");
     } else if (user.role !== "farmer") {
-      router.replace("/farmer/login");
+      router.replace("/");
     }
   }, [loading, router, user]);
 
@@ -212,16 +212,16 @@ export function FarmerShell({ children }: { children: React.ReactNode }) {
                 initial={{ boxShadow: "0px 4px 20px rgba(245,158,11,0.3)" }}
                 animate={{ 
                   boxShadow: [
-                    "0px 4px 20px rgba(245,158,11,0.3)", 
-                    "0px 4px 35px rgba(245,158,11,0.7)", 
-                    "0px 4px 20px rgba(245,158,11,0.3)"
+                    "0px 4px 20px rgba(46,125,50,0.3)", 
+                    "0px 4px 35px rgba(46,125,50,0.7)", 
+                    "0px 4px 20px rgba(46,125,50,0.3)"
                   ] 
                 }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                whileHover={{ scale: 1.05, backgroundColor: "#d97706" }}
+                whileHover={{ scale: 1.05, backgroundColor: "#f8fafc" }}
                 whileTap={{ scale: 0.95 }}
                 type="button"
-                className="group flex items-center gap-2 rounded-full border border-black/10 bg-[#F59E0B] px-5 py-2.5 text-sm font-medium tracking-wide text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
+                className="group flex items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium tracking-wide text-[#1B4332] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2E7D32]"
                 onClick={() => {
                   void logout().then(() => router.push("/"));
                 }}

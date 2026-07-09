@@ -126,7 +126,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading && (!user || (user.role !== "admin" && user.role !== "agronomist"))) {
-      router.replace("/admin/login");
+      router.replace("/");
     }
   }, [loading, router, user]);
 
