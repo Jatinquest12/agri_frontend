@@ -24,6 +24,7 @@ const links = [
   { href: "/admin/ai", label: "AI monitoring" },
   { href: "/admin/verification", label: "Verification" },
   { href: "/admin/analytics", label: "Analytics" },
+  { href: "/admin/marketplace", label: "Marketplace" },
 ];
 
 const commands: CommandItem[] = [
@@ -98,6 +99,15 @@ const commands: CommandItem[] = [
     description: "Platform analytics",
     keywords: ["report", "metrics"],
     aliases: ["reports", "charts", "kpi", "usage"],
+  },
+  {
+    id: "a-marketplace",
+    group: "navigation",
+    label: "Marketplace",
+    href: "/admin/marketplace",
+    description: "Commodity tokens & HTLC transfers",
+    keywords: ["token", "trade", "htlc"],
+    aliases: ["tokens", "commodity", "trade", "supply chain"],
   },
   {
     id: "a-signout",

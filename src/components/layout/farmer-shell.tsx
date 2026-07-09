@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Home, Map, PlusCircle, Sparkles, ShieldCheck, Bell, User, Search, LogOut } from "lucide-react";
+import { Home, Map, PlusCircle, Sparkles, ShieldCheck, Bell, User, Search, LogOut, Shield, Coins } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { useAuth } from "@/context/auth-context";
@@ -22,6 +22,8 @@ const links = [
   { href: "/farmer/farms/new", label: "Add farm", icon: PlusCircle },
   { href: "/farmer/insights", label: "AI insights", icon: Sparkles },
   { href: "/farmer/proof", label: "Proof", icon: ShieldCheck },
+  { href: "/farmer/insurance", label: "Insurance", icon: Shield },
+  { href: "/farmer/credit", label: "Credit score", icon: Coins },
   { href: "/farmer/notifications", label: "Notifications", icon: Bell },
   { href: "/farmer/profile", label: "Profile", icon: User },
 ];
@@ -80,6 +82,24 @@ const commands: CommandItem[] = [
     description: "Alerts and messages",
     keywords: ["alert", "inbox"],
     aliases: ["messages", "bell"],
+  },
+  {
+    id: "f-insurance",
+    group: "navigation",
+    label: "Insurance",
+    href: "/farmer/insurance",
+    description: "Parametric insurance claims",
+    keywords: ["claim", "cover"],
+    aliases: ["claims", "payout", "crop insurance"],
+  },
+  {
+    id: "f-credit",
+    group: "navigation",
+    label: "Credit score",
+    href: "/farmer/credit",
+    description: "Farm credit profile for lenders",
+    keywords: ["loan", "score", "bank"],
+    aliases: ["loan eligibility", "financing", "credit profile"],
   },
   {
     id: "f-profile",
