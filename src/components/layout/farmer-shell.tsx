@@ -19,6 +19,8 @@ const links = [
   { href: "/farmer/farms/new", label: "Add farm" },
   { href: "/farmer/insights", label: "AI insights" },
   { href: "/farmer/proof", label: "Proof" },
+  { href: "/farmer/insurance", label: "Insurance" },
+  { href: "/farmer/credit", label: "Credit score" },
   { href: "/farmer/notifications", label: "Notifications" },
   { href: "/farmer/profile", label: "Profile" },
 ];
@@ -77,6 +79,24 @@ const commands: CommandItem[] = [
     description: "Alerts and messages",
     keywords: ["alert", "inbox"],
     aliases: ["messages", "bell"],
+  },
+  {
+    id: "f-insurance",
+    group: "navigation",
+    label: "Insurance",
+    href: "/farmer/insurance",
+    description: "Parametric insurance claims",
+    keywords: ["claim", "cover"],
+    aliases: ["claims", "payout", "crop insurance"],
+  },
+  {
+    id: "f-credit",
+    group: "navigation",
+    label: "Credit score",
+    href: "/farmer/credit",
+    description: "Farm credit profile for lenders",
+    keywords: ["loan", "score", "bank"],
+    aliases: ["loan eligibility", "financing", "credit profile"],
   },
   {
     id: "f-profile",
