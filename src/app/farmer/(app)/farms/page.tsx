@@ -76,7 +76,7 @@ export default function FarmsListPage() {
               </div>
               <Link
                 href={`/farmer/farms/${f.id}`}
-                className="mt-4 inline-block text-sm font-semibold text-emerald-700 underline"
+                className="mt-4 inline-block text-sm font-semibold text-[#2E7D32] underline"
               >
                 Open detail
               </Link>

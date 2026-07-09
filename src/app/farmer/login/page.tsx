@@ -3,7 +3,7 @@ import { ADMIN_DEMO_PHONE, DEMO_OTP, DEMO_PHONE } from "@/lib/demo-auth";
 
 export default function FarmerLoginPage() {
   return (
-    <div className="app-backdrop flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-emerald-50/70 to-slate-50 px-4 py-10 dark:from-zinc-950 dark:to-zinc-950">
+    <div className="app-backdrop flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#E8F5E9]/70 to-slate-50 px-4 py-10 dark:from-zinc-950 dark:to-zinc-950">
       <OtpLoginCard
         portalLabel="Agritrust · Farmer workspace"
         heading="Sign in with mobile OTP"

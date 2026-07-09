@@ -11,7 +11,7 @@ type ButtonSize = "sm" | "md";
 
 const variants = {
   primary:
-    "bg-emerald-600 text-white hover:bg-emerald-700 disabled:bg-emerald-300",
+    "bg-[#2E7D32] text-white hover:bg-[#1B4332] disabled:opacity-50",
   secondary:
     "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
   ghost:

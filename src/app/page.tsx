@@ -27,7 +27,14 @@ import {
 
 export default function HomePage() {
   return (
-    <div className="app-backdrop flex min-h-screen flex-col bg-gradient-to-b from-emerald-50/50 via-white to-slate-50 text-slate-900 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-950 dark:text-slate-50">
+    <div className="relative flex min-h-screen flex-col text-slate-900 overflow-hidden bg-[#F8FAF5]">
+      {/* Premium animated background elements */}
+      <div className="pointer-events-none fixed inset-0 z-0 flex justify-center opacity-30">
+        <div className="absolute -top-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-gradient-to-br from-emerald-500/20 to-transparent blur-[100px]" />
+        <div className="absolute right-[-5%] top-[10%] h-[600px] w-[600px] rounded-full bg-gradient-to-bl from-rose-400/20 to-transparent blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[20%] h-[800px] w-[800px] rounded-full bg-gradient-to-tr from-orange-300/10 to-transparent blur-[150px]" />
+      </div>
+      <div className="relative z-10 flex w-full flex-1 flex-col">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-emerald-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
@@ -53,6 +60,7 @@ export default function HomePage() {
         <ConclusionSection highlights={conclusionHighlights} />
       </main>
       <SiteFooter />
+      </div>
     </div>
   );
 }

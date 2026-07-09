@@ -6,18 +6,18 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-200/80 bg-white/90 dark:border-slate-800 dark:bg-slate-950/90">
+    <footer className="border-t border-[#1B4332] bg-[#1B4332] text-white">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-8">
         <div>
-          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <p className="text-sm font-semibold text-white">
             {brand.legalName}
           </p>
-          <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/80">
             {brand.tagline}. Built for pilots and production API integration.
           </p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
             Product
           </p>
           <ul className="mt-3 space-y-2 text-sm">
@@ -25,7 +25,7 @@ export function SiteFooter() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-slate-600 underline-offset-2 hover:text-emerald-700 hover:underline dark:text-slate-400 dark:hover:text-emerald-300"
+                  className="text-[#A5D6A7] underline-offset-2 hover:text-white hover:underline"
                 >
                   {link.label}
                 </Link>
@@ -34,7 +34,7 @@ export function SiteFooter() {
           </ul>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
             Developers
           </p>
           <ul className="mt-3 space-y-2 text-sm">
@@ -42,23 +42,23 @@ export function SiteFooter() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-slate-600 underline-offset-2 hover:text-emerald-700 hover:underline dark:text-slate-400 dark:hover:text-emerald-300"
+                  className="text-[#A5D6A7] underline-offset-2 hover:text-white hover:underline"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-xs text-slate-500">
+          <p className="mt-4 text-xs text-white/80">
             Set{" "}
-            <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">
+            <code className="rounded border border-[#A5D6A7]/30 bg-[#1B4332] px-1 py-0.5 text-[#A5D6A7]">
               NEXT_PUBLIC_BACKEND_API_BASE
             </code>{" "}
-            in <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">.env.local</code>.
+            in <code className="rounded border border-[#A5D6A7]/30 bg-[#1B4332] px-1 py-0.5 text-[#A5D6A7]">.env.local</code>.
           </p>
         </div>
       </div>
-      <div className="border-t border-slate-200/80 px-4 py-4 text-center text-xs text-slate-500 dark:border-slate-800">
+      <div className="border-t border-[#A5D6A7]/20 px-4 py-4 text-center text-xs text-white/60">
         © {year} {brand.name}. All rights reserved.
       </div>
     </footer>

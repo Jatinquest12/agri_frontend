@@ -54,11 +54,11 @@ export function OtpLoginCard({
 
   const primaryClass =
     primaryButtonClass ??
-    "w-full rounded-xl bg-emerald-600 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60";
+    "w-full rounded-xl bg-[#2E7D32] py-2.5 text-sm font-semibold text-white hover:bg-[#1B4332] disabled:opacity-60";
 
   return (
     <div className="surface-card w-full max-w-md rounded-3xl border border-slate-200/80 bg-white/90 p-7 shadow-xl dark:border-slate-800 dark:bg-slate-900/85">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#2E7D32] dark:text-[#A5D6A7]">
         {portalLabel}
       </p>
       <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">

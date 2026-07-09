@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { Leaf } from "lucide-react";
 
 import { brand } from "@/data/site-content";
 import type { NavItem } from "@/types/site-content";
@@ -9,37 +13,44 @@ type SiteHeaderProps = {
 
 export function SiteHeader({ navItems }: SiteHeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/85">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3.5 md:px-8">
-        <Link href="/" className="group min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
-            {brand.name}
-          </p>
-          <p className="truncate text-sm text-slate-600 transition group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-slate-200">
-            {brand.tagline}
-          </p>
+    <motion.header 
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed left-0 right-0 top-4 z-50 mx-auto w-full max-w-5xl px-4"
+    >
+      <div className="backdrop-blur-xl flex items-center justify-between rounded-full px-6 py-3 shadow-xl bg-[#2E7D32]">
+        <Link href="/" className="group flex items-center gap-2 min-w-0">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition-transform group-hover:scale-110">
+            <Leaf className="h-4 w-4" />
+          </div>
+          <div>
+            <p className="text-sm font-bold tracking-widest text-white uppercase">
+              {brand.name}
+            </p>
+          </div>
         </Link>
-        <nav
-          className="flex flex-wrap items-center gap-2 text-xs md:text-sm"
-          aria-label="Primary"
-        >
+        <nav className="hidden md:flex items-center gap-1 text-sm font-medium" aria-label="Primary">
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="rounded-full border border-slate-200 px-3 py-1.5 font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-900 dark:border-slate-700 dark:text-slate-300 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-100"
+              className="rounded-full px-4 py-2 text-white/90 transition hover:bg-white/10 hover:text-white"
             >
               {item.label}
             </a>
           ))}
+        </nav>
+        <div className="flex items-center gap-3">
           <Link
             href="/farmer/login"
-            className="rounded-full bg-emerald-600 px-3.5 py-1.5 font-semibold text-white transition hover:bg-emerald-700"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#F59E0B] px-5 py-2 font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-[#F59E0B]/30"
           >
-            Sign in
+            <span className="relative z-10">Sign in</span>
+            <div className="absolute inset-0 z-0 h-full w-full bg-gradient-to-r from-[#F59E0B] to-[#F59E0B] opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
-        </nav>
+        </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

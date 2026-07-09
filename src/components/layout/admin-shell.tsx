@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { useAuth } from "@/context/auth-context";
 import { useNavigationShortcuts } from "@/hooks/use-navigation-shortcuts";
@@ -169,18 +171,29 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               >
                 Menu
               </button>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="button"
-                className={buttonClasses({ variant: "secondary", size: "sm" })}
+                className="group flex items-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 py-2 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-emerald-300 hover:bg-slate-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 dark:border-slate-700/80 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-emerald-600 dark:hover:bg-slate-800 dark:hover:text-emerald-300"
                 onClick={() => setPaletteOpen(true)}
               >
-                Search
-              </button>
+                <Search className="h-4 w-4 text-slate-400 transition-colors group-hover:text-emerald-500 dark:text-slate-500 dark:group-hover:text-emerald-400" />
+                <span>Search</span>
+                <div className="ml-2 hidden items-center gap-0.5 sm:flex">
+                  <kbd className="flex h-5 items-center justify-center rounded border border-slate-200 bg-slate-100 px-1.5 text-[10px] font-medium text-slate-500 transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50 group-hover:text-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:border-emerald-800 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400">
+                    ⌘
+                  </kbd>
+                  <kbd className="flex h-5 items-center justify-center rounded border border-slate-200 bg-slate-100 px-1.5 text-[10px] font-medium text-slate-500 transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50 group-hover:text-emerald-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:border-emerald-800 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400">
+                    K
+                  </kbd>
+                </div>
+              </motion.button>
               <button
                 type="button"
                 className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
                 onClick={() => {
-                  void logout().then(() => router.push("/admin/login"));
+                  void logout().then(() => router.push("/"));
                 }}
               >
                 Sign out
@@ -213,7 +226,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         items={commands}
         recentStorageKey="agritrust_palette_recent_admin"
         onLogout={() => {
-          void logout().then(() => router.push("/admin/login"));
+          void logout().then(() => router.push("/"));
         }}
       />
     </div>
